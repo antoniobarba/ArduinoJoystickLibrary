@@ -13,31 +13,30 @@
 
 #include <Joystick.h>
 
-Joystick_ Joystick;
-
+Joystick_ Joystick(0x03, JOYSTICK_TYPE_GAMEPAD, 3, 0, false, false, false, false, false, false, false, false, false, false, false);
+int buttons[3] = {2,3,8};
 void setup() {
   // Initialize Button Pins
-  pinMode(9, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode(11, INPUT_PULLUP);
-  pinMode(12, INPUT_PULLUP);
+  pinMode(2, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
+  pinMode(8, INPUT_PULLUP);
+  //pinMode(11, INPUT_PULLUP);
+  //pinMode(12, INPUT_PULLUP);
 
   // Initialize Joystick Library
   Joystick.begin();
+  Joystick.sendState();
 }
 
-// Constant that maps the phyical pin to the joystick button.
-const int pinToButtonMap = 9;
-
 // Last state of the button
-int lastButtonState[4] = {0,0,0,0};
+int lastButtonState[3] = {0,0,0};
 
 void loop() {
 
   // Read pin values
-  for (int index = 0; index < 4; index++)
+  for (int index = 0; index < 3; index++)
   {
-    int currentButtonState = !digitalRead(index + pinToButtonMap);
+    int currentButtonState = !digitalRead(buttons[index]);
     if (currentButtonState != lastButtonState[index])
     {
       Joystick.setButton(index, currentButtonState);
@@ -47,4 +46,3 @@ void loop() {
 
   delay(50);
 }
-
